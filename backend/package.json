@@ -10,6 +10,8 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
     "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -19,6 +21,11 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "pg": "^8.20.0",
     "prisma": "^7.5.0"
+  },
+  "prisma": {
+    "seed": "ts-node db/src/seed.ts",
+    "schema": "db/prisma/scchema.prisma"
   }
 }
