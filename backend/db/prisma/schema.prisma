@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+enum Country {
+  INDIA
+  AMERICA
+}
+
+enum OrderStatus {
+  DRAFT
+  PLACED
+  CANCELLED
+}
+
+model User {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password       String
+  role           Role
+  country        Country
+  createdAt      DateTime        @default(now())
+  orders         Order[]
+  paymentMethods PaymentMethod[]
+}
+
+model Restaurant {
+  id        String     @id @default(uuid())
+  name      String
+  country   Country
+  menuItems MenuItem[]
+  orders    Order[]
+}
+
+model MenuItem {
+  id           String      @id @default(uuid())
+  name         String
+  price        Float
+  description  String?
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  restaurantId String
+  orderItems   OrderItem[]
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  status       OrderStatus @default(DRAFT)
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  restaurantId String
+  orderItems   OrderItem[]
+  payment      Payment?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItemId String
+  quantity   Int
+  price      Float
+}
+
+model PaymentMethod {
+  id        String    @id @default(uuid())
+  type      String
+  details   String
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  isDefault Boolean   @default(false)
+  payments  Payment[]
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  order           Order         @relation(fields: [orderId], references: [id])
+  orderId         String        @unique
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String
+  amount          Float
+  status          String        @default("SUCCESS")
+  createdAt       DateTime      @default(now())
+}
