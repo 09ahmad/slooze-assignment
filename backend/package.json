@@ -3,6 +3,11 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "build":"bun build ./src/index.ts --outdir dist --target bun",
+    "start":"bun run dist/index.ts",
+    "dev":"bun run ./src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
@@ -25,7 +30,7 @@
     "prisma": "^7.5.0"
   },
   "prisma": {
-    "seed": "ts-node db/src/seed.ts",
-    "schema": "db/prisma/scchema.prisma"
+    "seed": "bun run db/src/seed.ts",
+    "schema": "db/prisma/schema.prisma"
   }
 }

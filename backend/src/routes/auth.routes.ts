@@ -8,7 +8,7 @@ const router = Router();
 router.post("/login", login);
 
 // POST /api/auth/me — return current user from auth middleware
-router.post("/me", authenticate, (req, res) => {
+router.get("/me", authenticate, (req, res) => {
   return res.json({
     id: req.user.id,
     name: req.user.name,
