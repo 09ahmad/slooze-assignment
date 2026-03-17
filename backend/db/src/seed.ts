@@ -8,6 +8,11 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+const userCount = await prisma.user.count();
+  if (userCount > 0) {
+    console.log("Database already seeded, skipping.");
+    return;
+  }
   const hash = (pw: string) => bcrypt.hashSync(pw, 10);
 
   // Reset (so seeding is repeatable)
